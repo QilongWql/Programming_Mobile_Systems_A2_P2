@@ -1,0 +1,33 @@
+<div class="privacy-container">
+    <div class="header-container">
+      <h1>Privacy and Security Policy</h1>
+      <button class="home-button" routerLink="/">HOME</button>
+    </div>
+  
+    <div class="content-container">
+      <section class="intro-section">
+        <p>We take your privacy and data security very seriously. This policy details how we protect your information and our security practices.</p>
+      </section>
+  
+      <section class="security-section">
+        <h2>Safety principle</h2>
+        <div class="principles-grid">
+          <div *ngFor="let principle of securityPrinciples" class="principle-card">
+            <div class="principle-header">
+              <h3>{{principle.title}}</h3>
+            </div>
+            <p>{{principle.description}}</p>
+          </div>
+        </div>
+      </section>
+  
+      <section class="contact-section">
+        <h2>Contact us</h2>
+        <p>If you have any questions about the privacy policy or data security, please contact us:</p>
+        <div class="contact-info">
+          <p><strong>E-mail：</strong>privacy&#64;GUXST.com</p>
+          <p><strong>TELEPHONE：</strong>123-456-7890</p>
+        </div>
+      </section>
+    </div>
+  </div>

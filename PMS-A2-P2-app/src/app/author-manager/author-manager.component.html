@@ -1,0 +1,101 @@
+<div class="author-container">
+  <div class="header-container">
+    <h1>Author management</h1>
+    <button class="home-button" routerLink="/">Back to home page</button>
+  </div>
+
+  <div class="controls-section">
+    <div class="search-box">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="applySearch()"
+        placeholder="Search author..."
+      >
+      <button (click)="applySearch()">Search</button>
+    </div>
+
+    <button class="add-button" (click)="startAddAuthor()" *ngIf="!isEditing">
+      Add a new author
+    </button>
+  </div>
+
+  <div class="author-form-section" *ngIf="authorForm">
+    <h2>{{ isEditing ? 'Editorial author' : 'Add a new author' }}</h2>
+    <form [formGroup]="authorForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>NAME*</label>
+        <input 
+          type="text" 
+          formControlName="name"
+          [class.invalid]="authorForm.get('name')?.invalid && authorForm.get('name')?.touched"
+        >
+        <div class="error-message" *ngIf="authorForm.get('name')?.hasError('required') && authorForm.get('name')?.touched">
+          The name cannot be blank
+        </div>
+        <div class="error-message" *ngIf="authorForm.get('name')?.hasError('maxlength')">
+          The name cannot exceed 50 characters
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>INTRO</label>
+        <textarea formControlName="bio" rows="3"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>NATIONALITY</label>
+        <input type="text" formControlName="nationality">
+      </div>
+
+      <div class="form-actions">
+        <button 
+          type="submit" 
+          class="submit-btn"
+          [disabled]="authorForm.invalid"
+        >
+          {{ isEditing ? 'Renewal' : 'Append' }}
+        </button>
+        <button 
+          type="button" 
+          class="cancel-btn"
+          (click)="cancelEdit()"
+          *ngIf="isEditing"
+        >
+        Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="authors-list">
+    <h2>List of authors ({{filteredAuthors.length}})</h2>
+    
+    <div *ngIf="filteredAuthors.length === 0" class="no-results">
+      {{searchTerm ? 'No matching authors were found' : 'No author data available'}}
+    </div>
+
+    <div *ngFor="let author of filteredAuthors" class="author-card">
+      <div class="author-info">
+        <h3>{{author.name}} <small>(ID: {{author.id}})</small></h3>
+        <p *ngIf="author.nationality" class="nationality">NATIONALITY: {{author.nationality}}</p>
+        <p *ngIf="author.bio" class="bio">{{author.bio}}</p>
+      </div>
+      <div class="author-actions">
+        <button class="edit-btn" (click)="onEdit(author.id)">EDITOR</button>
+        <button class="delete-btn" (click)="onDelete(author.id)">DELETE</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngIf="showConfirmDialog" class="confirmation-dialog">
+    <div class="dialog-content">
+      <p>Are you sure you want to delete this author? This will also delete the associated books.</p>
+      <div class="dialog-actions">
+        <button (click)="onDeleteConfirmed(true)" class="confirm-btn">VERIFY</button>
+        <button (click)="onDeleteConfirmed(false)" class="cancel-btn">CANCEL</button>
+      </div>
+    </div>
+  </div>
+</div>

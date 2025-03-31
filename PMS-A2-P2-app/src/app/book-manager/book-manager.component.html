@@ -1,0 +1,144 @@
+<div class="book-manager-container">
+  <div class="header-container">
+    <h1>Library management system</h1>
+    <button class="home-button" routerLink="/">Back to home page</button>
+  </div>
+  
+  <div class="manager-content">
+    <div class="book-list-section">
+      <h2>Book list</h2>
+      <div class="book-list-actions">
+        <button class="new-book-btn" (click)="resetForm()">Add new book</button>
+      </div>
+      
+      <div class="book-table-container">
+        <table class="book-table">
+          <thead>
+            <tr>
+              <th>TITLE</th>
+              <th>AUTHOR</th>
+              <th>SORT</th>
+              <th>PRICE</th>
+              <th>WINNOW</th>
+              <th>OPERATION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let book of books">
+              <td>{{ book.name }}</td>
+              <td>{{ getAuthorName(book.authorId) }}</td>
+              <td>{{ book.category }}</td>
+              <td>{{ book.price | currency }}</td>
+              <td>
+                <span class="featured-badge" *ngIf="book.featured">★</span>
+              </td>
+              <td class="actions">
+                <button class="edit-btn" (click)="onEdit(book.name)">EDITOR</button>
+                <button class="delete-btn" (click)="onDelete(book.name)">DELETE</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="book-form-section">
+      <h2>{{ isEditing ? 'Edit a book' : 'Add new book' }}</h2>
+      <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="name">BOOKNAME*</label>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name"
+            [class.invalid]="bookForm.get('name')?.invalid && bookForm.get('name')?.touched"
+          >
+          <div class="error-message" *ngIf="bookForm.get('name')?.hasError('required') && bookForm.get('name')?.touched">
+            The title cannot be empty
+          </div>
+          <div class="error-message" *ngIf="bookForm.get('name')?.hasError('maxlength')">
+            The title cannot be more than 50 characters long
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="authorId">AUTHOR*</label>
+          <select 
+            id="authorId" 
+            formControlName="authorId"
+            [class.invalid]="bookForm.get('authorId')?.invalid && bookForm.get('authorId')?.touched"
+          >
+            <option value="">Select author</option>
+            <option *ngFor="let author of authors" [value]="author.id">
+              {{ author.name }} (ID: {{ author.id }})
+            </option>
+          </select>
+          <div class="error-message" *ngIf="bookForm.get('authorId')?.hasError('required') && bookForm.get('authorId')?.touched">
+            Please select author
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="category">SORT*</label>
+          <select id="category" formControlName="category">
+            <option value="Painting">PAINTING</option>
+            <option value="Literature">LITERATURE</option>
+            <option value="Science">SCIENCE</option>
+            <option value="History">HISTORY</option>
+            <option value="Technology">TECHNOLOGY</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="price">PRICE*</label>
+          <input 
+            type="number" 
+            id="price" 
+            formControlName="price"
+            min="0"
+            [class.invalid]="bookForm.get('price')?.invalid && bookForm.get('price')?.touched"
+          >
+          <div class="error-message" *ngIf="bookForm.get('price')?.hasError('required') && bookForm.get('price')?.touched">
+            The price cannot be empty
+          </div>
+          <div class="error-message" *ngIf="bookForm.get('price')?.hasError('min')">
+            The price cannot be negative
+          </div>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="featured" formControlName="featured">
+          <label for="featured">Selected books</label>
+        </div>
+
+        <div class="form-actions">
+          <button 
+            type="submit" 
+            class="submit-btn"
+            [disabled]="bookForm.invalid"
+          >
+            {{ isEditing ? 'RENEWAL' : 'ADD' }}
+          </button>
+          <button 
+            type="button" 
+            class="cancel-btn"
+            (click)="resetForm()"
+            *ngIf="isEditing"
+          >
+            CANCEL
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="showConfirmDialog" class="confirmation-dialog">
+    <div class="dialog-content">
+      <p>Confirm to delete《{{ bookToDelete }}》?</p>
+      <div class="dialog-actions">
+        <button (click)="onDeleteConfirmed(true)" class="confirm-btn">VERIFY</button>
+        <button (click)="onDeleteConfirmed(false)" class="cancel-btn">CANCEL</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="help-container">
+  <div class="header-container">
+    <h1>Help center</h1>
+    <button class="home-button" routerLink="/">Back to home page</button>
+  </div>
+
+  <div class="help-content">
+    <section class="help-section">
+      <h2>Common Problem</h2>
+      <div class="faq-list">
+        <div *ngFor="let item of faqs" class="faq-item">
+          <div class="question" (click)="item.expanded = !item.expanded">
+            {{item.question}}
+            <span class="toggle-icon">{{item.expanded ? '−' : '+'}}</span>
+          </div>
+          <div class="answer" [class.expanded]="item.expanded">
+            {{item.answer}}
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="help-section">
+      <h2>TroubleShooting</h2>
+      <table class="troubleshooting-table">
+        <thead>
+          <tr>
+            <th width="40%">PROBLEM</th>
+            <th>SOLUTION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of troubleshooting">
+            <td>{{item.issue}}</td>
+            <td>{{item.solution}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </div>
+</div>

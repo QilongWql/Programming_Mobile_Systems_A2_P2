@@ -1,0 +1,49 @@
+<div class="home-container">
+    <header class="hero-section">
+      <h1>BOOK MANAGEMENT SYSTEM</h1>
+      <p class="subtitle">Efficiently manage your book collection and author information</p>
+      <div class="cta-buttons">
+        <a routerLink="/BookManagement" class="button primary">Book Management</a>
+        <a routerLink="/Search" class="button secondary">Book Search</a>
+        <a routerLink="/Author" class="button secondary">Author Management</a>
+      </div>
+    </header>
+  
+    <section class="stats-section">
+      <div class="stat-card">
+        <span class="stat-number">{{ totalBooksCount }}</span>
+        <span class="stat-label">Total collection</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">{{ featuredBooksCount }}</span>
+        <span class="stat-label">Selected books</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">{{ authorsCount }}</span>
+        <span class="stat-label">Number of authors</span>
+      </div>
+    </section>
+  
+    <section class="features-section">
+      <h2>System function</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>Library management</h3>
+          <p>Add, edit, and delete book information</p>
+        </div>
+        <div class="feature-card">
+          <h3>Intelligent search</h3>
+          <p>Quickly search collections by title</p>
+        </div>
+        <div class="feature-card">
+          <h3>Data security</h3>
+          <p>Local encrypted storage for privacy</p>
+        </div>
+      </div>
+    </section>
+  
+    <footer class="quick-links">
+      <a routerLink="/Privacy">Privacy Policy</a>
+      <a routerLink="/Help">Help</a>
+    </footer>
+  </div>

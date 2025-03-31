@@ -1,0 +1,111 @@
+<div class="search-container">
+  <div class="header-container">
+    <h1>Book search</h1>
+    <button class="home-button" routerLink="/">Back to home page</button>
+  </div>
+
+  <div class="search-controls">
+    <div class="search-box">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        (input)="applyFilters()"
+        [placeholder]="searchOptions.searchBy === 'title' ? 'Enter title...' : 'Enter author...'"
+      >
+      <button (click)="toggleSearchBy()">
+        Switching search: {{searchOptions.searchBy === 'title' ? 'AUTHOR' : 'BOOK'}}
+      </button>
+      <button (click)="applyFilters()">SEARCH</button>
+    </div>
+
+    <div class="filter-section">
+      <h2>Advanced screening</h2>
+
+      <div class="filter-group">
+        <label>Filter by author:</label>
+        <select 
+          [(ngModel)]="filters.selectedAuthor" 
+          (change)="applyFilters()"
+        >
+          <option value="">All author</option>
+          <option 
+            *ngFor="let author of allAuthors" 
+            [value]="author.id"
+          >
+            {{author.name}}
+          </option>
+        </select>
+      </div>
+        
+      <div class="filter-group">
+        <label>Sort:</label>
+        <select [(ngModel)]="filters.category" (change)="applyFilters()">
+          <option value="">All sort</option>
+          <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+        </select>
+      </div>
+  
+      <div class="filter-group">
+          <label>Price range:</label>
+          <div class="price-range">
+            <input 
+              type="number" 
+              [(ngModel)]="filters.minPrice" 
+              (change)="applyFilters()"
+              placeholder="Minimum price"
+              min="0"
+            >
+            <span>至</span>
+            <input 
+              type="number" 
+              [(ngModel)]="filters.maxPrice" 
+              (change)="applyFilters()"
+              placeholder="Maximum price"
+              min="0"
+            >
+          </div>
+        </div>
+  
+        <div class="filter-group">
+          <label>
+            <input 
+              type="checkbox" 
+              [(ngModel)]="filters.featuredOnly" 
+              (change)="applyFilters()"
+            >
+            Only selected books are displayed
+          </label>
+        </div>
+  
+        <button class="reset-btn" (click)="resetAllFilters()">Reset all filters</button>
+      </div>
+    </div>
+
+  <div class="results-section">
+    <h2>Search results ({{filteredBooks.length}})</h2>
+    <div *ngIf="!hasSearched" class="initial-state">
+      <p>Use the search box to find books</p>
+    </div>
+
+    <div *ngIf="hasSearched"  class="no-results">
+      <div *ngIf="filteredBooks.length === 0" class="initial-state">
+        <p>No matching book was found</p>
+      </div>
+    </div>
+
+    <div *ngIf="filteredBooks.length > 0" class="book-grid">
+      <div *ngFor="let book of filteredBooks" class="book-card">
+        <div class="book-header">
+          <h3>{{book.name}}</h3>
+          <span *ngIf="book.featured" class="featured-badge">Winnow</span>
+        </div>
+        <p class="author">Author: {{getAuthorName(book)}}</p>
+        <button 
+          class="detail-btn" 
+          [routerLink]="['/books', book.name]"
+        >
+        View details
+        </button>
+      </div>
+    </div>
+  </div>
